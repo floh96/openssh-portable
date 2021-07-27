@@ -251,7 +251,7 @@ function Start-OpenSSHBootstrap
             Write-BuildMsg -AsError -ErrorAction Stop -Message "VC++ 2015.3 v140 toolset are not installed."
         }
     }
-    elseIf ($VS2015Path -or (-not (Test-Path $VcVars)) -or (-not (Test-Path $sdkPath))) {
+    elseif (!$VS2015Path -or (-not (Test-Path $VcVars)) -or (-not (Test-Path $sdkPath))) {
         $packageName = "vcbuildtools"
         Write-BuildMsg -AsInfo -Message "$packageName not present. Installing $packageName ..."
         choco install $packageName -ia "/InstallSelectableItems VisualCppBuildTools_ATLMFC_SDK;VisualCppBuildTools_NETFX_SDK" -y --force --limitoutput --execution-timeout 120 2>&1 >> $script:BuildLogFile
@@ -651,7 +651,8 @@ function Get-VS2019BuildToolPath
     {
         return $null
     }
-   return $toolAvailable[0].FullName
+
+    return $toolAvailable[0].FullName
 }
 
 function Get-VS2017BuildToolPath
@@ -668,7 +669,8 @@ function Get-VS2017BuildToolPath
     {
         return $null
     }
-   return $toolAvailable[0].FullName
+
+    return $toolAvailable[0].FullName
 }
 
 function Get-VS2015BuildToolPath
@@ -684,7 +686,8 @@ function Get-VS2015BuildToolPath
     {
         return $null
     }
-   return $toolAvailable[0].FullName
+
+    return $toolAvailable[0].FullName
 }
 
 function Get-Windows10SDKVersion
@@ -699,6 +702,9 @@ function Get-Windows10SDKVersion
    else {
        return $null
    }
+
+   $versionsAvailable = $versionsAvailable | Sort-Object -Descending
+   return $versionsAvailable[0]
 }
 
 function Get-BuildLogFile
